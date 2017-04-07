@@ -15,7 +15,7 @@ fi
 APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
 
 (
-    rm "${BUILD_DIR}/${APP_BASE}/lib" &&
+    rm -f "${BUILD_DIR}/${APP_BASE}/lib" &&
     mv "${BUILD_DIR}/lib" "${BUILD_DIR}/${APP_BASE}/lib" &&
     mv "${BUILD_DIR}/${APP_BASE}" "${STAGE}" &&
     rm -rf "${BUILD_DIR}" &&
