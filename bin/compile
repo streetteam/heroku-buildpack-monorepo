@@ -14,7 +14,7 @@ fi
 APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
 
 (
-    if [ -f "${BUILD_DIR}/yarn.lock" ]; then
+    if [ -f "${BUILD_DIR}/yarn.lock" ] && [ ! -f "${ENV_DIR}/${APP_BASE}/yarn.lock" ]; then
         mv "${BUILD_DIR}/yarn.lock" "${BUILD_DIR}/${APP_BASE}/"
     fi
     rm -f "${BUILD_DIR}/${APP_BASE}/lib" &&
