@@ -4,7 +4,6 @@ indent() {
 }
 
 BUILD_DIR="$1"
-CACHE_DIR="$2"
 ENV_DIR="$3"
 STAGE="$(mktemp -d)"
 
@@ -15,6 +14,9 @@ fi
 APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
 
 (
+    if [ -f "${BUILD_DIR}/yarn.lock" ] && [ ! -f "${BUILD_DIR}/${APP_BASE}/yarn.lock" ]; then
+        mv "${BUILD_DIR}/yarn.lock" "${BUILD_DIR}/${APP_BASE}/"
+    fi
     rm -f "${BUILD_DIR}/${APP_BASE}/lib" &&
     mv "${BUILD_DIR}/lib" "${BUILD_DIR}/${APP_BASE}/lib" &&
     mv "${BUILD_DIR}/${APP_BASE}" "${STAGE}" &&
