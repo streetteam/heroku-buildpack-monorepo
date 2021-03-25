@@ -28,6 +28,9 @@ APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
 
     if [ -d "${BUILD_DIR}/.awscli" ]; then
       echo "Moving awscli and logging into codeartifact"
+      curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+      python3 get-pip.py
+
       AWS_SECRET_ACCESS_KEY="$(cat "${ENV_DIR}/AWS_SECRET_ACCESS_KEY")" AWS_ACCESS_KEY_ID=$(cat "${ENV_DIR}/AWS_ACCESS_KEY_ID") \
       ${BUILD_DIR}/.awscli/bin/aws codeartifact login --tool pip --domain pollen --repository root-python --region=us-east-2
       mv "${BUILD_DIR}/.awscli" "${BUILD_DIR}/${APP_BASE}/"
