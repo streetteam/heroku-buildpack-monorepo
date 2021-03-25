@@ -27,7 +27,8 @@ APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
     fi
 
     if [ -d "${BUILD_DIR}/.awscli" ]; then
-      echo "Moving awscli"
+      echo "Moving awscli and logging into codeartifact"
+      ${BUILD_DIR}/.awscli/bin/aws codeartifact login --tool pip --domain pollen --repository root-python --region=us-east-2
       mv "${BUILD_DIR}/.awscli" "${BUILD_DIR}/${APP_BASE}/"
     fi
     
