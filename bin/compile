@@ -16,6 +16,9 @@ if [ ! -f "${ENV_DIR}/APP_BASE" ]; then
     exit 1
 fi
 APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
+export AWS_SECRET_ACCESS_KEY="$(cat "${ENV_DIR}/AWS_SECRET_ACCESS_KEY")"
+export AWS_ACCESS_KEY_ID=$(cat "${ENV_DIR}/AWS_ACCESS_KEY_ID")
+
 
 (
     if [ -f "${BUILD_DIR}/yarn.lock" ] && [ ! -f "${BUILD_DIR}/${APP_BASE}/yarn.lock" ]; then
@@ -27,12 +30,13 @@ APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
     fi
 
     if [ -d "${BUILD_DIR}/.awscli" ]; then
-      echo "Moving awscli and logging into codeartifact"
-      curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-      python3 get-pip.py
+      echo "Moving awscli and configure codeartifact"
+      REPO_URL=$(${BUILD_DIR}/.awscli/bin/aws codeartifact get-repository-endpoint --repository root-python --domain pollen --format pypi --output text --region=us-east-2)
+      REPO_URL=${REPO_URL#"https://"}
+      CODEARTIFACT_TOKEN=$(${BUILD_DIR}/.awscli/bin/aws codeartifact get-authorization-token --domain pollen  --output text --query authorizationToken --region=us-east-2)
+      INDEX_URL="https://aws:${CODEARTIFACT_TOKEN}@${REPO_URL}"
+      echo $INDEX_URL > ${ENV_DIR}/PIP_EXTRA_INDEX_URL
 
-      AWS_SECRET_ACCESS_KEY="$(cat "${ENV_DIR}/AWS_SECRET_ACCESS_KEY")" AWS_ACCESS_KEY_ID=$(cat "${ENV_DIR}/AWS_ACCESS_KEY_ID") \
-      ${BUILD_DIR}/.awscli/bin/aws codeartifact login --tool pip --domain pollen --repository root-python --region=us-east-2
       mv "${BUILD_DIR}/.awscli" "${BUILD_DIR}/${APP_BASE}/"
     fi
     
