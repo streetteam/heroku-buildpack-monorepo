@@ -25,6 +25,12 @@ APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
     if [ -f "${BUILD_DIR}/bin/check_for_maintenance_mode" ]; then
         mv "${BUILD_DIR}/bin/check_for_maintenance_mode" "${BUILD_DIR}/${APP_BASE}/bin"
     fi
+
+    if [ -d "${BUILD_DIR}/.awscli" ]; then
+      echo "Moving awscli"
+      mv "${BUILD_DIR}/.awscli" "${BUILD_DIR}/${APP_BASE}/"
+    fi
+    
     rm -f "${BUILD_DIR}/${APP_BASE}/lib" &&
     mv "${BUILD_DIR}/lib" "${BUILD_DIR}/${APP_BASE}/lib" &&
     mv "${BUILD_DIR}/${APP_BASE}" "${STAGE}" &&
