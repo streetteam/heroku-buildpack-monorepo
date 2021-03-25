@@ -34,9 +34,9 @@ export AWS_ACCESS_KEY_ID=$(cat "${ENV_DIR}/AWS_ACCESS_KEY_ID")
       REPO_URL=$(${BUILD_DIR}/.awscli/bin/aws codeartifact get-repository-endpoint --repository root-python --domain pollen --format pypi --output text --region=us-east-2)
       REPO_URL=${REPO_URL#"https://"}
       CODEARTIFACT_TOKEN=$(${BUILD_DIR}/.awscli/bin/aws codeartifact get-authorization-token --domain pollen  --output text --query authorizationToken --region=us-east-2)
-      INDEX_URL="https://aws:${CODEARTIFACT_TOKEN}@${REPO_URL}"
-      echo $INDEX_URL > ${ENV_DIR}/PIP_EXTRA_INDEX_URL
+      INDEX_URL="https://aws:${CODEARTIFACT_TOKEN}@${REPO_URL}simple/"
 
+      echo $INDEX_URL > ${ENV_DIR}/PIP_EXTRA_INDEX_URL
       mv "${BUILD_DIR}/.awscli" "${BUILD_DIR}/${APP_BASE}/"
     fi
     
