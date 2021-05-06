@@ -40,8 +40,6 @@ export AWS_ACCESS_KEY_ID=$(cat "${ENV_DIR}/AWS_ACCESS_KEY_ID")
       mv "${BUILD_DIR}/.awscli" "${BUILD_DIR}/${APP_BASE}/"
     fi
     
-    rm -f "${BUILD_DIR}/${APP_BASE}/lib" &&
-    mv "${BUILD_DIR}/lib" "${BUILD_DIR}/${APP_BASE}/lib" &&
     mv "${BUILD_DIR}/${APP_BASE}" "${STAGE}" &&
     rm -rf "${BUILD_DIR}"/* &&
     mv "${STAGE}/$(basename "$APP_BASE")"/* "${BUILD_DIR}"
